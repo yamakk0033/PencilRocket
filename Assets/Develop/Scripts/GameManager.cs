@@ -8,8 +8,8 @@ public class GameManager : MonoBehaviour
 {
     public enum eMode
     {
+        None,
         Title,
-        Start,
         Game,
         Pause,
         Clear,
@@ -22,42 +22,39 @@ public class GameManager : MonoBehaviour
         get { return _mode; }
         set
         {
+            if (_mode == value) return;
+
             _mode = value;
             ChangeMode(value);
         }
     }
 
-    [SerializeField] private GameObject titleCanvas;
-    [SerializeField] private GameObject gameCanvas;
-    [SerializeField] private GameObject clearCanvas;
-    [SerializeField] private GameObject gameOverCanvas;
+    [SerializeField] private GameObject canvasManagerObject;
     [SerializeField] private GameObject blockGeneratorPrefab;
     [SerializeField] private GameObject playerObject;
+    private CanvasManager canvasManager;
     private BlockGenerator blockGenerator;
     private PlayerController playerController;
-    private GameCanvasController gameCanvasController;
 
     private void Start()
     {
+        canvasManager = canvasManagerObject.GetComponent<CanvasManager>();
+
         var blockGo = Instantiate(blockGeneratorPrefab);
         blockGenerator = blockGo.GetComponent<BlockGenerator>();
         blockGenerator.gameObject.SetActive(false);
 
         playerController = playerObject.GetComponent<PlayerController>();
-        gameCanvasController = gameCanvas.GetComponent<GameCanvasController>();
 
         StartCoroutine(Loop());
     }
 
     private IEnumerator Loop()
     {
-        var wait = new WaitForSeconds(1.0f);
-
-        Mode = eMode.Start;
-        yield return wait;
+        Mode = eMode.Title;
+        while (Mode == eMode.Title) yield return null;
 
         Mode = eMode.Game;
-        blockGenerator.gameObject.SetActive(true);
         while(true)
         {
             if(blockGenerator.IsNeedleCollision)
@@ -65,7 +62,7 @@ public class GameManager : MonoBehaviour
                 Mode = eMode.GameOver;
                 break;
             }
-            if(playerObject.transform.position.y >= 8.0f)
+            if(playerController.transform.position.y >= 8.0f)
             {
                 blockGenerator.SetPosition(Vector3.down * 3.0f);
                 playerController.SetPosition(Vector3.down * 3.0f);
@@ -74,7 +71,6 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
-
         yield break;
     }
 
@@ -82,16 +78,7 @@ public class GameManager : MonoBehaviour
 
     private void ChangeMode(eMode m)
     {
-        new Dictionary<eMode, GameObject>()
-            {
-                { eMode.Title, titleCanvas.gameObject },
-                { eMode.Game, gameCanvas.gameObject },
-                { eMode.Pause, gameCanvas.gameObject },
-                { eMode.Clear, clearCanvas.gameObject },
-                { eMode.GameOver, gameOverCanvas.gameObject },
-            }
-        .ToList().ForEach(pair => pair.Value.SetActive(pair.Key == m));
-
+        canvasManager.ChangeMode(m);
 
         switch (m)
         {
@@ -102,11 +89,17 @@ public class GameManager : MonoBehaviour
                 blockGenerator.gameObject.SetActive(false);
                 break;
         }
-
-        gameCanvasController.ChangeMode(m);
     }
 
 
+
+    public void OnClickTitleLetter()
+    {
+        if(Mode == eMode.Title)
+        {
+            Mode = eMode.Game;
+        }
+    }
 
     public void OnClickPauseButton()
     {
@@ -120,5 +113,10 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 0.0f;
             Mode = eMode.Pause;
         }
+    }
+
+    public void OnClickTitleBackButton()
+    {
+        StartCoroutine(Loop());
     }
 }

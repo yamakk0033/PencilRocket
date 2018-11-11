@@ -62,6 +62,14 @@ public class BlockController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
+    private void Update()
+    {
+        if(IsNeedleCollision)
+        {
+            ChangeState();
+        }
+    }
+
     private void FixedUpdate()
     {
         if(rb.bodyType == RigidbodyType2D.Dynamic)
@@ -74,9 +82,14 @@ public class BlockController : MonoBehaviour
     {
         if (collision.gameObject.tag == TagName.PLAYER)
         {
-            IsBlockCollision = true;
-            rb.bodyType = RigidbodyType2D.Kinematic;
-            rb.velocity = Vector2.zero;
+            ChangeState();
         }
+    }
+
+    private void ChangeState()
+    {
+        IsBlockCollision = true;
+        rb.bodyType = RigidbodyType2D.Kinematic;
+        rb.velocity = Vector2.zero;
     }
 }

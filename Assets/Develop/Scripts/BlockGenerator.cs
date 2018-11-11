@@ -34,13 +34,11 @@ public class BlockGenerator : MonoBehaviour
 
             blockQueue.Enqueue(bc);
         }
-
-        this.Apper(firstPosition.y);
     }
 
     private void Start()
     {
-        StartCoroutine(Loop());
+        Init();
     }
 
     private IEnumerator Loop()
@@ -88,5 +86,16 @@ public class BlockGenerator : MonoBehaviour
         {
             item.transform.position += pos;
         }
+    }
+
+    public void Init()
+    {
+        foreach (var item in blockQueue)
+        {
+            item.gameObject.SetActive(false);
+        }
+
+        this.Apper(firstPosition.y);
+        StartCoroutine(Loop());
     }
 }
