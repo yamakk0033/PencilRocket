@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -28,13 +29,13 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject titleCanvas;
     [SerializeField] private GameObject gameCanvas;
-    [SerializeField] private GameObject pauseCanvas;
     [SerializeField] private GameObject clearCanvas;
     [SerializeField] private GameObject gameOverCanvas;
     [SerializeField] private GameObject blockGeneratorPrefab;
     [SerializeField] private GameObject playerObject;
     private BlockGenerator blockGenerator;
     private PlayerController playerController;
+    private GameCanvasController gameCanvasController;
 
     private void Start()
     {
@@ -43,6 +44,7 @@ public class GameManager : MonoBehaviour
         blockGenerator.gameObject.SetActive(false);
 
         playerController = playerObject.GetComponent<PlayerController>();
+        gameCanvasController = gameCanvas.GetComponent<GameCanvasController>();
 
         StartCoroutine(Loop());
     }
@@ -84,7 +86,7 @@ public class GameManager : MonoBehaviour
             {
                 { eMode.Title, titleCanvas.gameObject },
                 { eMode.Game, gameCanvas.gameObject },
-                { eMode.Pause, pauseCanvas.gameObject },
+                { eMode.Pause, gameCanvas.gameObject },
                 { eMode.Clear, clearCanvas.gameObject },
                 { eMode.GameOver, gameOverCanvas.gameObject },
             }
@@ -94,12 +96,14 @@ public class GameManager : MonoBehaviour
         switch (m)
         {
             case eMode.Game:
-                blockGenerator.gameObject.SetActive(true);
+                if(!blockGenerator.gameObject.activeSelf) blockGenerator.gameObject.SetActive(true);
                 break;
             case eMode.GameOver:
                 blockGenerator.gameObject.SetActive(false);
                 break;
         }
+
+        gameCanvasController.ChangeMode(m);
     }
 
 
