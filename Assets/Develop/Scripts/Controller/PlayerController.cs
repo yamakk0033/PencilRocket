@@ -2,57 +2,70 @@
 using Assets.Constants;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+namespace Assets.Controller
 {
-    private Rigidbody2D rb;
-    private float jumpTime = 0.0f;
-    private bool isJump = false;
-
-    // Use this for initialization
-    private void Start()
+    public class PlayerController : MonoBehaviour
     {
-        rb = GetComponent<Rigidbody2D>();
-    }
+        private Rigidbody2D rb;
+        private Vector3 firstPosition;
+        private Quaternion firstRotation;
+        private float jumpTime = 0.0f;
+        private bool isJump = false;
 
-    // Update is called once per frame
-    private void Update()
-    {
-        if (TouchInput.GetLayerNo() == LayerNo.UI) return;
-
-
-        if (TouchInput.GetState() == TouchInput.State.Began)
+        private void Awake()
         {
-            if (isJump)
+            rb = GetComponent<Rigidbody2D>();
+            firstPosition = transform.position;
+            firstRotation = transform.rotation;
+        }
+
+
+        // Update is called once per frame
+        private void Update()
+        {
+            if (TouchInput.GetLayerNo() == LayerNo.UI) return;
+
+
+            if (TouchInput.GetState() == TouchInput.State.Began)
             {
-                rb.AddForce(Vector2.up * 6, ForceMode2D.Impulse);
+                if (isJump)
+                {
+                    rb.AddForce(Vector2.up * 6, ForceMode2D.Impulse);
+                }
+            }
+            else if (TouchInput.GetState() == TouchInput.State.Moved)
+            {
+                jumpTime += Time.deltaTime;
+                if (isJump && jumpTime <= 0.3f)
+                {
+                    rb.velocity = Vector2.up * 6;
+                }
+            }
+            else if (TouchInput.GetState() == TouchInput.State.Ended)
+            {
+                isJump = false;
             }
         }
-        else if (TouchInput.GetState() == TouchInput.State.Moved)
+
+        private void OnCollisionEnter2D(Collision2D collision)
         {
-            jumpTime += Time.deltaTime;
-            if (isJump && jumpTime <= 0.3f)
+            if (collision.gameObject.tag == TagName.GROUND || collision.gameObject.tag == TagName.BLOCK)
             {
-                rb.velocity = Vector2.up * 6;
+                jumpTime = 0.0f;
+                isJump = true;
             }
         }
-        else if (TouchInput.GetState() == TouchInput.State.Ended)
+
+
+        public void SetPosition(Vector3 pos)
         {
-            isJump = false;
+            transform.position += pos;
         }
-    }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == TagName.GROUND || collision.gameObject.tag == TagName.BLOCK)
+        public void Init()
         {
-            jumpTime = 0.0f;
-            isJump = true;
+            transform.position = firstPosition;
+            transform.rotation = firstRotation;
         }
-    }
-
-
-    public void SetPosition(Vector3 pos)
-    {
-        transform.position += pos;
     }
 }

@@ -1,122 +1,132 @@
-﻿using System;
+﻿using Assets.Controller;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using UnityEngine.Advertisements;
 
-public class GameManager : MonoBehaviour
+namespace Assets
 {
-    public enum eMode
+    public class GameManager : MonoBehaviour
     {
-        None,
-        Title,
-        Game,
-        Pause,
-        Clear,
-        GameOver,
-    }
-
-    private eMode _mode;
-    private eMode Mode
-    {
-        get { return _mode; }
-        set
+        public enum eMode
         {
-            if (_mode == value) return;
-
-            _mode = value;
-            ChangeMode(value);
+            None,
+            Title,
+            Game,
+            Pause,
+            Clear,
+            GameOver,
         }
-    }
 
-    [SerializeField] private GameObject canvasManagerObject;
-    [SerializeField] private GameObject blockGeneratorPrefab;
-    [SerializeField] private GameObject playerObject;
-    private CanvasManager canvasManager;
-    private BlockGenerator blockGenerator;
-    private PlayerController playerController;
-
-    private void Start()
-    {
-        canvasManager = canvasManagerObject.GetComponent<CanvasManager>();
-
-        var blockGo = Instantiate(blockGeneratorPrefab);
-        blockGenerator = blockGo.GetComponent<BlockGenerator>();
-        blockGenerator.gameObject.SetActive(false);
-
-        playerController = playerObject.GetComponent<PlayerController>();
-
-        StartCoroutine(Loop());
-    }
-
-    private IEnumerator Loop()
-    {
-        Mode = eMode.Title;
-        while (Mode == eMode.Title) yield return null;
-
-        Mode = eMode.Game;
-        while(true)
+        private eMode _mode;
+        private eMode Mode
         {
-            if(blockGenerator.IsNeedleCollision)
+            get { return _mode; }
+            set
             {
-                Mode = eMode.GameOver;
-                break;
+                if (_mode == value) return;
+
+                _mode = value;
+                ChangeMode(value);
             }
-            if(playerController.transform.position.y >= 8.0f)
+        }
+
+        [SerializeField] private GameObject canvasManagerObject;
+        [SerializeField] private GameObject blockGeneratorPrefab;
+        [SerializeField] private GameObject playerObject;
+        private CanvasManager canvasManager;
+        private BlockGenerator blockGenerator;
+        private PlayerController playerController;
+
+        private void Start()
+        {
+            canvasManager = canvasManagerObject.GetComponent<CanvasManager>();
+
+            var blockGo = Instantiate(blockGeneratorPrefab);
+            blockGenerator = blockGo.GetComponent<BlockGenerator>();
+            blockGenerator.gameObject.SetActive(false);
+
+            playerController = playerObject.GetComponent<PlayerController>();
+
+            StartCoroutine(Loop());
+        }
+
+        private IEnumerator Loop()
+        {
+            Mode = eMode.Title;
+            while (Mode == eMode.Title) yield return null;
+
+            Mode = eMode.Game;
+            while (true)
             {
-                blockGenerator.SetPosition(Vector3.down * 3.0f);
-                playerController.SetPosition(Vector3.down * 3.0f);
+                if (blockGenerator.IsNeedleCollision)
+                {
+                    Mode = eMode.GameOver;
+                    break;
+                }
+                if (playerController.transform.position.y >= 8.0f)
+                {
+                    blockGenerator.SetPosition(Vector3.down * 3.0f);
+                    playerController.SetPosition(Vector3.down * 3.0f);
+                }
+
+                yield return null;
             }
 
-            yield return null;
+            yield break;
         }
 
-        yield break;
-    }
 
 
-
-    private void ChangeMode(eMode m)
-    {
-        canvasManager.ChangeMode(m);
-
-        switch (m)
+        private void ChangeMode(eMode m)
         {
-            case eMode.Game:
-                if(!blockGenerator.gameObject.activeSelf) blockGenerator.gameObject.SetActive(true);
-                break;
-            case eMode.GameOver:
-                blockGenerator.gameObject.SetActive(false);
-                break;
+            canvasManager.ChangeMode(m);
+
+            switch (m)
+            {
+                case eMode.Game:
+                    if (!blockGenerator.gameObject.activeSelf) blockGenerator.gameObject.SetActive(true);
+                    break;
+                //case eMode.GameOver:
+                //    blockGenerator.gameObject.SetActive(false);
+                //    break;
+            }
         }
-    }
 
 
 
-    public void OnClickTitleLetter()
-    {
-        if(Mode == eMode.Title)
+        public void OnClickTitleLetter()
         {
-            Mode = eMode.Game;
+            if (Mode == eMode.Title)
+            {
+                Mode = eMode.Game;
+            }
         }
-    }
 
-    public void OnClickPauseButton()
-    {
-        if(Mode == eMode.Pause)
+        public void OnClickPauseButton()
         {
-            Time.timeScale = 1.0f;
-            Mode = eMode.Game;
+            if (Mode == eMode.Pause)
+            {
+                Time.timeScale = 1.0f;
+                Mode = eMode.Game;
+            }
+            else
+            {
+                Time.timeScale = 0.0f;
+                Mode = eMode.Pause;
+            }
         }
-        else
-        {
-            Time.timeScale = 0.0f;
-            Mode = eMode.Pause;
-        }
-    }
 
-    public void OnClickTitleBackButton()
-    {
-        StartCoroutine(Loop());
+        public void OnClickAdsButton()
+        {
+            Advertisement.Show();
+        }
+
+        public void OnClickTitleBackButton()
+        {
+            playerController.Init();
+            blockGenerator.Init();
+            blockGenerator.gameObject.SetActive(false);
+            StartCoroutine(Loop());
+        }
     }
 }

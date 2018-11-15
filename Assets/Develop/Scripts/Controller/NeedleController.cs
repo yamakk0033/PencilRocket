@@ -1,23 +1,26 @@
 ﻿using Assets.Constants;
 using UnityEngine;
 
-public class NeedleController : MonoBehaviour
+namespace Assets.Controller
 {
-    public bool IsTouch { private set; get; } = false;
-
-
-
-    public void Init()
+    public class NeedleController : MonoBehaviour
     {
-        IsTouch = false;
-    }
+        public bool IsTouch { private set; get; } = false;
 
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == TagName.PLAYER)
+
+        public void Init()
         {
-            IsTouch = true;
+            IsTouch = false;
+        }
+
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (collision.gameObject.tag == TagName.PLAYER)
+            {
+                IsTouch = true;
+            }
         }
     }
 }

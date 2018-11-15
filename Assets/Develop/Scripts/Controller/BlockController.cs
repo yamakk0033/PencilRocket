@@ -1,95 +1,98 @@
 ﻿using Assets.Constants;
 using UnityEngine;
 
-public class BlockController : MonoBehaviour
+namespace Assets.Controller
 {
-    public bool IsBlockCollision { private set; get; } = false;
-    public bool IsNeedleCollision => children.IsTouch;
-
-
-    public enum eDirection
+    public class BlockController : MonoBehaviour
     {
-        Left,
-        Right,
-    }
+        public bool IsBlockCollision { private set; get; } = false;
+        public bool IsNeedleCollision => children.IsTouch;
 
-    //private BlockGenerator parent;
-    private NeedleController children;
-    private Rigidbody2D rb;
-    private Vector2 velocity = Vector2.zero;
 
-    private eDirection _direction;
-    private eDirection direction
-    {
-        get { return _direction; }
-        set
+        public enum eDirection
         {
-            _direction = value;
+            Left,
+            Right,
+        }
 
-            switch (value)
+        //private BlockGenerator parent;
+        private NeedleController children;
+        private Rigidbody2D rb;
+        private Vector2 velocity = Vector2.zero;
+
+        private eDirection _direction;
+        private eDirection direction
+        {
+            get { return _direction; }
+            set
             {
-                case eDirection.Left:
-                    transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
-                    velocity = new Vector2(4.0f, 0.0f);
-                    break;
-                case eDirection.Right:
-                    transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
-                    velocity = new Vector2(-4.0f, 0.0f);
-                    break;
+                _direction = value;
+
+                switch (value)
+                {
+                    case eDirection.Left:
+                        transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
+                        velocity = new Vector2(4.0f, 0.0f);
+                        break;
+                    case eDirection.Right:
+                        transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                        velocity = new Vector2(-4.0f, 0.0f);
+                        break;
+                }
             }
         }
-    }
 
 
 
 
-    public void Init(eDirection dir)
-    {
-        children.Init();
-        IsBlockCollision = false;
-        rb.bodyType = RigidbodyType2D.Dynamic;
-        direction = dir;
-
-        //rb.bodyType = RigidbodyType2D.Dynamic;
-    }
-
-
-
-    private void Awake()
-    {
-        //parent = GetComponentInParent<BlockGenerator>();
-        children = GetComponentInChildren<NeedleController>();
-        rb = GetComponent<Rigidbody2D>();
-    }
-
-    private void Update()
-    {
-        if(IsNeedleCollision)
+        public void Init(eDirection dir)
         {
-            ChangeState();
-        }
-    }
+            children.Init();
+            IsBlockCollision = false;
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            direction = dir;
 
-    private void FixedUpdate()
-    {
-        if(rb.bodyType == RigidbodyType2D.Dynamic)
+            //rb.bodyType = RigidbodyType2D.Dynamic;
+        }
+
+
+
+        private void Awake()
         {
-            rb.velocity = velocity;
+            //parent = GetComponentInParent<BlockGenerator>();
+            children = GetComponentInChildren<NeedleController>();
+            rb = GetComponent<Rigidbody2D>();
         }
-    }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == TagName.PLAYER)
+        private void Update()
         {
-            ChangeState();
+            if (IsNeedleCollision)
+            {
+                ChangeState();
+            }
         }
-    }
 
-    private void ChangeState()
-    {
-        IsBlockCollision = true;
-        rb.bodyType = RigidbodyType2D.Kinematic;
-        rb.velocity = Vector2.zero;
+        private void FixedUpdate()
+        {
+            if (rb.bodyType == RigidbodyType2D.Dynamic)
+            {
+                rb.velocity = velocity;
+            }
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (collision.gameObject.tag == TagName.PLAYER)
+            {
+                ChangeState();
+            }
+        }
+
+        private void ChangeState()
+        {
+            IsBlockCollision = true;
+            rb.bodyType = RigidbodyType2D.Kinematic;
+            rb.velocity = Vector2.zero;
+        }
     }
 }

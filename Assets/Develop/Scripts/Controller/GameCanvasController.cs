@@ -3,20 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameCanvasController : MonoBehaviour
+namespace Assets.Controller
 {
-    [SerializeField] private GameObject panel;
-
-    public void ChangeMode(GameManager.eMode mode)
+    public class GameCanvasController : MonoBehaviour
     {
-        switch (mode)
+        [SerializeField] private GameObject panel;
+
+        public void ChangeMode(GameManager.eMode mode)
         {
-            case GameManager.eMode.Pause:
-                panel.SetActive(true);
-                break;
-            default:
-                panel.SetActive(false);
-                break;
+            switch (mode)
+            {
+                case GameManager.eMode.Pause:
+                    panel.SetActive(true);
+                    break;
+                default:
+                    panel.SetActive(false);
+                    break;
+            }
         }
     }
 }
