@@ -6,21 +6,24 @@ namespace Assets.Controller
 {
     public class PlayerController : MonoBehaviour
     {
-        private Rigidbody2D rb;
         private Vector3 firstPosition;
         private Quaternion firstRotation;
+
+        private Rigidbody2D rb;
+        private AudioSource audioSource;
+
         private float jumpTime = 0.0f;
         private bool isJump = false;
 
         private void Awake()
         {
-            rb = GetComponent<Rigidbody2D>();
             firstPosition = transform.position;
             firstRotation = transform.rotation;
+            rb = GetComponent<Rigidbody2D>();
+            audioSource = GetComponent<AudioSource>();
         }
 
 
-        // Update is called once per frame
         private void Update()
         {
             if (TouchInput.GetLayerNo() == LayerNo.UI) return;
@@ -31,6 +34,7 @@ namespace Assets.Controller
                 if (isJump)
                 {
                     rb.AddForce(Vector2.up * 6, ForceMode2D.Impulse);
+                    audioSource.Play();
                 }
             }
             else if (TouchInput.GetState() == TouchInput.State.Moved)
