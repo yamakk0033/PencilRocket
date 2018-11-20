@@ -1,19 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 namespace Assets.Controller
 {
+    [DisallowMultipleComponent]
     public class GameCanvasController : MonoBehaviour
     {
         [SerializeField] private GameObject panel;
 
-        public void ChangeMode(GameManager.eMode mode)
+        public void ChangeMode(GameMode.eMode mode)
         {
             switch (mode)
             {
-                case GameManager.eMode.Pause:
+                case GameMode.eMode.Pause:
                     panel.SetActive(true);
                     break;
                 default:

@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace Assets.Controller
 {
+    [DisallowMultipleComponent]
     public class BlockController : MonoBehaviour
     {
         public bool IsBlockCollision { private set; get; } = false;
         public bool IsNeedleCollision => children.IsTouch;
-
 
         public enum eDirection
         {
@@ -15,7 +15,7 @@ namespace Assets.Controller
             Right,
         }
 
-        //private BlockGenerator parent;
+
         private NeedleController children;
         private Rigidbody2D rb;
         private Vector2 velocity = Vector2.zero;
@@ -42,24 +42,8 @@ namespace Assets.Controller
             }
         }
 
-
-
-
-        public void Init(eDirection dir)
-        {
-            children.Init();
-            IsBlockCollision = false;
-            rb.bodyType = RigidbodyType2D.Dynamic;
-            direction = dir;
-
-            //rb.bodyType = RigidbodyType2D.Dynamic;
-        }
-
-
-
         private void Awake()
         {
-            //parent = GetComponentInParent<BlockGenerator>();
             children = GetComponentInChildren<NeedleController>();
             rb = GetComponent<Rigidbody2D>();
         }
@@ -93,6 +77,16 @@ namespace Assets.Controller
             IsBlockCollision = true;
             rb.bodyType = RigidbodyType2D.Kinematic;
             rb.velocity = Vector2.zero;
+        }
+
+
+
+        public void Init(eDirection dir)
+        {
+            children.Init();
+            IsBlockCollision = false;
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            direction = dir;
         }
     }
 }

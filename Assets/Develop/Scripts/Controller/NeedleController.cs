@@ -3,16 +3,10 @@ using UnityEngine;
 
 namespace Assets.Controller
 {
+    [DisallowMultipleComponent]
     public class NeedleController : MonoBehaviour
     {
         public bool IsTouch { private set; get; } = false;
-
-
-
-        public void Init()
-        {
-            IsTouch = false;
-        }
 
 
         private void OnCollisionEnter2D(Collision2D collision)
@@ -21,6 +15,12 @@ namespace Assets.Controller
             {
                 IsTouch = true;
             }
+        }
+
+
+        public void Init()
+        {
+            IsTouch = false;
         }
     }
 }

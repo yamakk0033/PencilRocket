@@ -1,19 +1,19 @@
-﻿using Assets;
-using Assets.Constants;
+﻿using Assets.Constants;
 using UnityEngine;
 
 namespace Assets.Controller
 {
+    [DisallowMultipleComponent]
     public class PlayerController : MonoBehaviour
     {
         private Vector3 firstPosition;
         private Quaternion firstRotation;
-
         private Rigidbody2D rb;
         private AudioSource audioSource;
 
         private float jumpTime = 0.0f;
         private bool isJump = false;
+
 
         private void Awake()
         {
@@ -59,6 +59,7 @@ namespace Assets.Controller
                 isJump = true;
             }
         }
+
 
 
         public void SetPosition(Vector3 pos)

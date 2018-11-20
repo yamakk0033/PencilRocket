@@ -6,17 +6,19 @@ using UnityEngine;
 
 namespace Assets
 {
+    [DisallowMultipleComponent]
     public class BlockGenerator : MonoBehaviour
     {
+        [SerializeField] private GameObject blockPrefab = null;
+
+
         public bool IsNeedleCollision { get { return (target == null) ? false : target.IsNeedleCollision; } }
 
         private readonly int BLOCK_LIST_MAX = 10;
 
-        [SerializeField] private GameObject blockPrefab = null;
-
         private Queue<BlockController> blockQueue = new Queue<BlockController>();
-        private BlockController target = null;
-        private Vector3 firstPosition = Vector3.zero;
+        private BlockController target;
+        private Vector3 firstPosition;
         private float colliderSizeY;
 
 
@@ -39,11 +41,6 @@ namespace Assets
             }
         }
 
-        private void OnEnable()
-        {
-            Init();
-        }
-
         private IEnumerator Loop()
         {
             while (true)
@@ -64,8 +61,7 @@ namespace Assets
             }
         }
 
-
-        private void Apper(float pos_y)
+        private void Apper(float posY)
         {
             var dir = Random.Range(0, 2) == 0 ? BlockController.eDirection.Left : BlockController.eDirection.Right;
 
@@ -74,9 +70,8 @@ namespace Assets
             target.transform.position =
                 new Vector3(
                     (dir == BlockController.eDirection.Left) ? -firstPosition.x : firstPosition.x
-                    , pos_y
+                    , posY
                 );
-
 
             target.gameObject.SetActive(true);
         }

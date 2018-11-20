@@ -2,6 +2,7 @@
 
 namespace Assets.Controller
 {
+    [DisallowMultipleComponent]
     public class CameraController : MonoBehaviour
     {
         [SerializeField] private GameObject player;

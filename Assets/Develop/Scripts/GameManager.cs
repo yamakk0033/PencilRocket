@@ -5,31 +5,9 @@ using UnityEngine.Advertisements;
 
 namespace Assets
 {
+    [DisallowMultipleComponent]
     public class GameManager : MonoBehaviour
     {
-        public enum eMode
-        {
-            None,
-            Title,
-            Game,
-            Pause,
-            Clear,
-            GameOver,
-        }
-
-        private eMode _mode;
-        private eMode Mode
-        {
-            get { return _mode; }
-            set
-            {
-                if (_mode == value) return;
-
-                _mode = value;
-                ChangeMode(value);
-            }
-        }
-
         [SerializeField] private GameObject canvasManagerObject;
         [SerializeField] private GameObject blockGeneratorPrefab;
         [SerializeField] private GameObject playerObject;
@@ -37,30 +15,43 @@ namespace Assets
         private BlockGenerator blockGenerator;
         private PlayerController playerController;
 
-        private void Start()
+        private GameMode.eMode _mode;
+        private GameMode.eMode Mode
+        {
+            get { return _mode; }
+            set
+            {
+                if (_mode == value) return;
+
+                _mode = value;
+                canvasManager.ChangeMode(value);
+            }
+        }
+
+
+        private void Awake()
         {
             canvasManager = canvasManagerObject.GetComponent<CanvasManager>();
 
             var blockGo = Instantiate(blockGeneratorPrefab);
             blockGenerator = blockGo.GetComponent<BlockGenerator>();
-            blockGenerator.gameObject.SetActive(false);
 
             playerController = playerObject.GetComponent<PlayerController>();
+        }
 
-            StartCoroutine(Loop());
+        private void Start()
+        {
+            Mode = GameMode.eMode.Title;
         }
 
         private IEnumerator Loop()
         {
-            Mode = eMode.Title;
-            while (Mode == eMode.Title) yield return null;
-
-            Mode = eMode.Game;
+            Mode = GameMode.eMode.Game;
             while (true)
             {
                 if (blockGenerator.IsNeedleCollision)
                 {
-                    Mode = eMode.GameOver;
+                    Mode = GameMode.eMode.GameOver;
                     break;
                 }
                 if (playerController.transform.position.y >= 8.0f)
@@ -77,56 +68,30 @@ namespace Assets
 
 
 
-        private void ChangeMode(eMode m)
-        {
-            canvasManager.ChangeMode(m);
-
-            switch (m)
-            {
-                case eMode.Game:
-                    if (!blockGenerator.gameObject.activeSelf) blockGenerator.gameObject.SetActive(true);
-                    break;
-                //case eMode.GameOver:
-                //    blockGenerator.gameObject.SetActive(false);
-                //    break;
-            }
-        }
-
-
-
         public void OnClickTitleLetter()
         {
-            if (Mode == eMode.Title)
-            {
-                Mode = eMode.Game;
-            }
+            playerController.Init();
+            blockGenerator.Init();
+            StartCoroutine(Loop());
         }
 
         public void OnClickPauseButton()
         {
-            if (Mode == eMode.Pause)
+            if (Mode == GameMode.eMode.Pause)
             {
                 Time.timeScale = 1.0f;
-                Mode = eMode.Game;
+                Mode = GameMode.eMode.Game;
             }
             else
             {
                 Time.timeScale = 0.0f;
-                Mode = eMode.Pause;
+                Mode = GameMode.eMode.Pause;
             }
         }
 
         public void OnClickAdsButton()
         {
             Advertisement.Show();
-        }
-
-        public void OnClickTitleBackButton()
-        {
-            playerController.Init();
-            blockGenerator.Init();
-            blockGenerator.gameObject.SetActive(false);
-            StartCoroutine(Loop());
         }
     }
 }

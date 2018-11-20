@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Assets
 {
+    [DisallowMultipleComponent]
     public class CanvasManager : MonoBehaviour
     {
         [SerializeField] private GameObject titleCanvas;
@@ -12,22 +13,22 @@ namespace Assets
         [SerializeField] private GameObject clearCanvas;
         [SerializeField] private GameObject gameOverCanvas;
         private GameCanvasController gameCanvasController;
-        private Dictionary<GameObject, List<GameManager.eMode>> dictionary;
+        private Dictionary<GameObject, List<GameMode.eMode>> dictionary;
 
         private void Awake()
         {
             gameCanvasController = gameCanvas.GetComponent<GameCanvasController>();
 
-            dictionary = new Dictionary<GameObject, List<GameManager.eMode>>()
-        {
-            { titleCanvas, new List<GameManager.eMode>(){ GameManager.eMode.Title } },
-            { gameCanvas, new List<GameManager.eMode>(){ GameManager.eMode.Game, GameManager.eMode.Pause } },
-            { clearCanvas, new List<GameManager.eMode>(){ GameManager.eMode.Clear } },
-            { gameOverCanvas, new List<GameManager.eMode>(){ GameManager.eMode.GameOver } },
-        };
+            dictionary = new Dictionary<GameObject, List<GameMode.eMode>>()
+            {
+                { titleCanvas, new List<GameMode.eMode>(){ GameMode.eMode.Title } },
+                { gameCanvas, new List<GameMode.eMode>(){ GameMode.eMode.Game, GameMode.eMode.Pause } },
+                { clearCanvas, new List<GameMode.eMode>(){ GameMode.eMode.Clear } },
+                { gameOverCanvas, new List<GameMode.eMode>(){ GameMode.eMode.GameOver } },
+            };
         }
 
-        public void ChangeMode(GameManager.eMode mode)
+        public void ChangeMode(GameMode.eMode mode)
         {
             foreach (var pair in dictionary)
             {
