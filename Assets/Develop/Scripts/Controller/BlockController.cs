@@ -9,12 +9,6 @@ namespace Assets.Controller
         public bool IsBlockCollision { private set; get; } = false;
         public bool IsNeedleCollision => children.IsTouch;
 
-        public enum eDirection
-        {
-            Left,
-            Right,
-        }
-
 
         private NeedleController children;
         private Rigidbody2D rb;
@@ -29,7 +23,7 @@ namespace Assets.Controller
             rb = GetComponent<Rigidbody2D>();
 
             behaviour = new BlockBehaviour();
-            //behaviour.Init(transform, rb, velocity);
+            behaviour.Init(transform, rb, velocity);
         }
 
         private void Update()
@@ -66,27 +60,15 @@ namespace Assets.Controller
 
 
 
-        public void Init(float x, float y, eDirection dir, BlockBehaviour.ePattern ptn)
+        public void Init(float x, float y)
         {
             children.Init();
             IsBlockCollision = false;
             rb.bodyType = RigidbodyType2D.Dynamic;
-            pattern = ptn;
-            behaviour.InitProc(ptn);
+            pattern = (BlockBehaviour.ePattern)Random.Range(0, (int)BlockBehaviour.ePattern.No5 + 1);
 
-            switch (dir)
-            {
-                case eDirection.Left:
-                    transform.position = new Vector3(-x, y);
-                    transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
-                    velocity = new Vector2(4.0f, 0.0f);
-                    break;
-                case eDirection.Right:
-                    transform.position = new Vector3(x, y);
-                    transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
-                    velocity = new Vector2(-4.0f, 0.0f);
-                    break;
-            }
+            transform.position = new Vector3(x, y);
+            behaviour.InitProc(pattern);
         }
     }
 }

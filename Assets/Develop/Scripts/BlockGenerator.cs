@@ -63,10 +63,8 @@ namespace Assets
 
         private void Apper(float posY)
         {
-            var dir = Random.Range(0, 2) == 0 ? BlockController.eDirection.Left : BlockController.eDirection.Right;
-
             target = blockQueue.Dequeue();
-            target.Init(firstPosition.x, posY, dir, BlockBehaviour.ePattern.No1);
+            target.Init(firstPosition.x, posY);
             //target.transform.position =
             //    new Vector3(
             //        (dir == BlockController.eDirection.Left) ? -firstPosition.x : firstPosition.x

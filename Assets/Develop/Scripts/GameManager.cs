@@ -41,6 +41,15 @@ namespace Assets
             Mode = GameMode.eMode.Title;
         }
 
+        private void OnApplicationFocus(bool focus)
+        {
+            if (focus && Mode != GameMode.eMode.Pause)
+            {
+                Mode = GameMode.eMode.Pause;
+                Time.timeScale = 0.0f;
+            }
+        }
+
         private IEnumerator GameLoop()
         {
             Mode = GameMode.eMode.Game;

@@ -1,12 +1,11 @@
-﻿using Assets.Controller;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Assets
 {
-    public class BlockBehaviour : MonoBehaviour
+    public class BlockBehaviour
     {
         public enum ePattern
         {
@@ -32,16 +31,23 @@ namespace Assets
             No5,
         }
 
+        public enum eDirection
+        {
+            Left,
+            Right,
+        }
+
         private Dictionary<ePattern, Action> initDictionary = new Dictionary<ePattern, Action>();
         private Dictionary<ePattern, Action> updateDictionary = new Dictionary<ePattern, Action>();
 
         private Transform tran;
         private Rigidbody2D rb;
         private Vector2 velocity;
+        private eDirection direction;
         private float stopTime = 0.0f;
 
 
-        private void Awake()
+        public BlockBehaviour()
         {
             initDictionary.Add(ePattern.No1, InitNo1);
             initDictionary.Add(ePattern.No2, InitNo1);
@@ -105,7 +111,7 @@ namespace Assets
 
 
 
-        public void Init(Transform t, Rigidbody2D r, Vector2 vel, BlockController.eDirection dir)
+        public void Init(Transform t, Rigidbody2D r, Vector2 vel)
         {
             tran = t;
             rb = r;
@@ -114,8 +120,22 @@ namespace Assets
 
         public void InitProc(ePattern ptn)
         {
-            stopTime = 0.0f;
             initDictionary[ptn]();
+
+            direction = Random.Range(0, 2) == 0 ? eDirection.Left : eDirection.Right;
+            stopTime = 0.0f;
+
+            switch (direction)
+            {
+                case eDirection.Left:
+                    tran.position = new Vector3(tran.position.x * -1, tran.position.y);
+                    tran.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
+                    break;
+                case eDirection.Right:
+                    tran.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                    velocity *= -1;
+                    break;
+            }
         }
 
         public void UpdateProc(ePattern ptn)
