@@ -9,7 +9,7 @@ namespace Assets
     [DisallowMultipleComponent]
     public class BlockGenerator : MonoBehaviour
     {
-        [SerializeField] private GameObject blockPrefab = null;
+        [SerializeField] private GameObject BlockPrefab = null;
 
 
         public bool IsNeedleCollision { get { return (target == null) ? false : target.IsNeedleCollision; } }
@@ -24,14 +24,14 @@ namespace Assets
 
         private void Awake()
         {
-            firstPosition = blockPrefab.transform.position;
+            firstPosition = BlockPrefab.transform.position;
 
-            var col = blockPrefab.GetComponent<BoxCollider2D>();
-            colliderSizeY = col.size.y * blockPrefab.transform.localScale.y;
+            var col = BlockPrefab.GetComponent<BoxCollider2D>();
+            colliderSizeY = col.size.y * BlockPrefab.transform.localScale.y;
 
             foreach (int i in Enumerable.Range(0, BLOCK_LIST_MAX))
             {
-                var go = Instantiate(blockPrefab, transform);
+                var go = Instantiate(BlockPrefab, transform);
                 var bc = go.GetComponent<BlockController>();
 
                 go.transform.parent = transform;
@@ -66,12 +66,12 @@ namespace Assets
             var dir = Random.Range(0, 2) == 0 ? BlockController.eDirection.Left : BlockController.eDirection.Right;
 
             target = blockQueue.Dequeue();
-            target.Init(dir);
-            target.transform.position =
-                new Vector3(
-                    (dir == BlockController.eDirection.Left) ? -firstPosition.x : firstPosition.x
-                    , posY
-                );
+            target.Init(firstPosition.x, posY, dir, BlockBehaviour.ePattern.No1);
+            //target.transform.position =
+            //    new Vector3(
+            //        (dir == BlockController.eDirection.Left) ? -firstPosition.x : firstPosition.x
+            //        , posY
+            //    );
 
             target.gameObject.SetActive(true);
         }

@@ -14,6 +14,8 @@ namespace Assets.Controller
         private float jumpTime = 0.0f;
         private bool isJump = false;
 
+        private float maxY = 0.0f;
+
 
         private void Awake()
         {
@@ -22,7 +24,6 @@ namespace Assets.Controller
             rb = GetComponent<Rigidbody2D>();
             audioSource = GetComponent<AudioSource>();
         }
-
 
         private void Update()
         {
@@ -33,21 +34,28 @@ namespace Assets.Controller
             {
                 if (isJump)
                 {
-                    rb.AddForce(Vector2.up * 6, ForceMode2D.Impulse);
+                    rb.AddForce(Vector2.up * 4, ForceMode2D.Impulse);
                     audioSource.Play();
                 }
             }
             else if (TouchInput.GetState() == TouchInput.State.Moved)
             {
                 jumpTime += Time.deltaTime;
-                if (isJump && jumpTime <= 0.3f)
+                if (isJump && jumpTime <= 0.2f)
                 {
-                    rb.velocity = Vector2.up * 6;
+                    rb.velocity = Vector2.up * 4;
                 }
             }
             else if (TouchInput.GetState() == TouchInput.State.Ended)
             {
                 isJump = false;
+            }
+
+
+            if(transform.position.y > maxY)
+            {
+                ScoreManager.Altitude += (decimal)(transform.position.y - maxY);
+                maxY = transform.position.y;
             }
         }
 
@@ -65,12 +73,16 @@ namespace Assets.Controller
         public void SetPosition(Vector3 pos)
         {
             transform.position += pos;
+            maxY += pos.y;
         }
 
         public void Init()
         {
             transform.position = firstPosition;
             transform.rotation = firstRotation;
+
+            maxY = firstPosition.y;
+            ScoreManager.Altitude = 0m;
         }
     }
 }

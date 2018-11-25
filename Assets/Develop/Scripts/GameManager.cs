@@ -8,9 +8,9 @@ namespace Assets
     [DisallowMultipleComponent]
     public class GameManager : MonoBehaviour
     {
-        [SerializeField] private GameObject canvasManagerObject;
-        [SerializeField] private GameObject blockGeneratorPrefab;
-        [SerializeField] private GameObject playerObject;
+        [SerializeField] private GameObject CanvasManagerObject;
+        [SerializeField] private GameObject BlockGeneratorPrefab;
+        [SerializeField] private GameObject PlayerObject;
         private CanvasManager canvasManager;
         private BlockGenerator blockGenerator;
         private PlayerController playerController;
@@ -31,20 +31,17 @@ namespace Assets
 
         private void Awake()
         {
-            canvasManager = canvasManagerObject.GetComponent<CanvasManager>();
+            canvasManager = CanvasManagerObject.GetComponent<CanvasManager>();
 
-            var blockGo = Instantiate(blockGeneratorPrefab);
+            var blockGo = Instantiate(BlockGeneratorPrefab);
             blockGenerator = blockGo.GetComponent<BlockGenerator>();
 
-            playerController = playerObject.GetComponent<PlayerController>();
-        }
+            playerController = PlayerObject.GetComponent<PlayerController>();
 
-        private void Start()
-        {
             Mode = GameMode.eMode.Title;
         }
 
-        private IEnumerator Loop()
+        private IEnumerator GameLoop()
         {
             Mode = GameMode.eMode.Game;
             while (true)
@@ -54,10 +51,10 @@ namespace Assets
                     Mode = GameMode.eMode.GameOver;
                     break;
                 }
-                if (playerController.transform.position.y >= 8.0f)
+                if (playerController.transform.position.y >= 15.0f)
                 {
-                    blockGenerator.SetPosition(Vector3.down * 3.0f);
-                    playerController.SetPosition(Vector3.down * 3.0f);
+                    blockGenerator.SetPosition(Vector3.down * 10.0f);
+                    playerController.SetPosition(Vector3.down * 10.0f);
                 }
 
                 yield return null;
@@ -72,7 +69,7 @@ namespace Assets
         {
             playerController.Init();
             blockGenerator.Init();
-            StartCoroutine(Loop());
+            StartCoroutine(GameLoop());
         }
 
         public void OnClickPauseButton()

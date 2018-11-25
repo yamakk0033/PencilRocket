@@ -19,33 +19,17 @@ namespace Assets.Controller
         private NeedleController children;
         private Rigidbody2D rb;
         private Vector2 velocity = Vector2.zero;
+        private BlockBehaviour behaviour;
+        private BlockBehaviour.ePattern pattern;
 
-        private eDirection _direction;
-        private eDirection direction
-        {
-            get { return _direction; }
-            set
-            {
-                _direction = value;
-
-                switch (value)
-                {
-                    case eDirection.Left:
-                        transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
-                        velocity = new Vector2(4.0f, 0.0f);
-                        break;
-                    case eDirection.Right:
-                        transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
-                        velocity = new Vector2(-4.0f, 0.0f);
-                        break;
-                }
-            }
-        }
 
         private void Awake()
         {
             children = GetComponentInChildren<NeedleController>();
             rb = GetComponent<Rigidbody2D>();
+
+            behaviour = new BlockBehaviour();
+            //behaviour.Init(transform, rb, velocity);
         }
 
         private void Update()
@@ -60,7 +44,8 @@ namespace Assets.Controller
         {
             if (rb.bodyType == RigidbodyType2D.Dynamic)
             {
-                rb.velocity = velocity;
+                //rb.velocity = velocity;
+                behaviour.UpdateProc(pattern);
             }
         }
 
@@ -81,12 +66,27 @@ namespace Assets.Controller
 
 
 
-        public void Init(eDirection dir)
+        public void Init(float x, float y, eDirection dir, BlockBehaviour.ePattern ptn)
         {
             children.Init();
             IsBlockCollision = false;
             rb.bodyType = RigidbodyType2D.Dynamic;
-            direction = dir;
+            pattern = ptn;
+            behaviour.InitProc(ptn);
+
+            switch (dir)
+            {
+                case eDirection.Left:
+                    transform.position = new Vector3(-x, y);
+                    transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
+                    velocity = new Vector2(4.0f, 0.0f);
+                    break;
+                case eDirection.Right:
+                    transform.position = new Vector3(x, y);
+                    transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                    velocity = new Vector2(-4.0f, 0.0f);
+                    break;
+            }
         }
     }
 }

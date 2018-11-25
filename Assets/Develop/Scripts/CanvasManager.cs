@@ -8,23 +8,23 @@ namespace Assets
     [DisallowMultipleComponent]
     public class CanvasManager : MonoBehaviour
     {
-        [SerializeField] private GameObject titleCanvas;
-        [SerializeField] private GameObject gameCanvas;
-        [SerializeField] private GameObject clearCanvas;
-        [SerializeField] private GameObject gameOverCanvas;
+        [SerializeField] private GameObject TitleCanvas;
+        [SerializeField] private GameObject GameCanvas;
+        [SerializeField] private GameObject ClearCanvas;
+        [SerializeField] private GameObject GameOverCanvas;
         private GameCanvasController gameCanvasController;
         private Dictionary<GameObject, List<GameMode.eMode>> dictionary;
 
         private void Awake()
         {
-            gameCanvasController = gameCanvas.GetComponent<GameCanvasController>();
+            gameCanvasController = GameCanvas.GetComponent<GameCanvasController>();
 
             dictionary = new Dictionary<GameObject, List<GameMode.eMode>>()
             {
-                { titleCanvas, new List<GameMode.eMode>(){ GameMode.eMode.Title } },
-                { gameCanvas, new List<GameMode.eMode>(){ GameMode.eMode.Game, GameMode.eMode.Pause } },
-                { clearCanvas, new List<GameMode.eMode>(){ GameMode.eMode.Clear } },
-                { gameOverCanvas, new List<GameMode.eMode>(){ GameMode.eMode.GameOver } },
+                { TitleCanvas, new List<GameMode.eMode>(){ GameMode.eMode.Title } },
+                { GameCanvas, new List<GameMode.eMode>(){ GameMode.eMode.Game, GameMode.eMode.Pause } },
+                { ClearCanvas, new List<GameMode.eMode>(){ GameMode.eMode.Clear } },
+                { GameOverCanvas, new List<GameMode.eMode>(){ GameMode.eMode.GameOver } },
             };
         }
 

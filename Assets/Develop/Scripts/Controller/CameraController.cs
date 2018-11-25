@@ -5,13 +5,13 @@ namespace Assets.Controller
     [DisallowMultipleComponent]
     public class CameraController : MonoBehaviour
     {
-        [SerializeField] private GameObject player;
+        [SerializeField] private GameObject PlayerObject;
         private Transform playerTran;
         private Vector3 position;
 
         private void Start()
         {
-            playerTran = player.transform;
+            playerTran = PlayerObject.transform;
             position = new Vector3(transform.position.x, 0.0f, transform.position.z);
         }
 

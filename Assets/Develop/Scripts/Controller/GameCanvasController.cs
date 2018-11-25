@@ -5,17 +5,17 @@ namespace Assets.Controller
     [DisallowMultipleComponent]
     public class GameCanvasController : MonoBehaviour
     {
-        [SerializeField] private GameObject panel;
+        [SerializeField] private GameObject PanelObject;
 
         public void ChangeMode(GameMode.eMode mode)
         {
             switch (mode)
             {
                 case GameMode.eMode.Pause:
-                    panel.SetActive(true);
+                    PanelObject.SetActive(true);
                     break;
                 default:
-                    panel.SetActive(false);
+                    PanelObject.SetActive(false);
                     break;
             }
         }

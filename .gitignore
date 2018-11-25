@@ -34,3 +34,9 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+
+
+# Exclude
+Pixel Font - Tripfive/
+Pixel Font - Tripfive.meta
