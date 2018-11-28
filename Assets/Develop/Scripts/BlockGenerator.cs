@@ -51,10 +51,7 @@ namespace Assets
                 }
                 else if (target.IsBlockCollision)
                 {
-                    var last_target = target;
-                    blockQueue.Enqueue(target);
-
-                    this.Apper(last_target.transform.position.y + colliderSizeY);
+                    this.Apper(target.transform.position.y + colliderSizeY);
                 }
 
                 yield return null;
@@ -63,13 +60,10 @@ namespace Assets
 
         private void Apper(float posY)
         {
+            if (target != null) blockQueue.Enqueue(target);
+
             target = blockQueue.Dequeue();
             target.Init(firstPosition.x, posY);
-            //target.transform.position =
-            //    new Vector3(
-            //        (dir == BlockController.eDirection.Left) ? -firstPosition.x : firstPosition.x
-            //        , posY
-            //    );
 
             target.gameObject.SetActive(true);
         }

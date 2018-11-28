@@ -12,6 +12,7 @@ namespace Assets
             Pause,
             Clear,
             GameOver,
+            Credits,
         }
     }
 }

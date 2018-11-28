@@ -43,7 +43,7 @@ namespace Assets
 
         private void OnApplicationFocus(bool focus)
         {
-            if (focus && Mode != GameMode.eMode.Pause)
+            if (focus && Mode == GameMode.eMode.Game)
             {
                 Mode = GameMode.eMode.Pause;
                 Time.timeScale = 0.0f;
@@ -98,6 +98,11 @@ namespace Assets
         public void OnClickAdsButton()
         {
             Advertisement.Show();
+        }
+
+        public void OnClickCredisButton()
+        {
+            Mode = (Mode == GameMode.eMode.GameOver) ? GameMode.eMode.Credits : GameMode.eMode.GameOver;
         }
     }
 }
