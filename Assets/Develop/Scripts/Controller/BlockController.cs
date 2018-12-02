@@ -70,5 +70,10 @@ namespace Assets.Controller
             transform.position = new Vector3(x, y);
             behaviour.InitProc(pattern);
         }
+
+        public BlockBehaviour.eDirection GetDirection()
+        {
+            return behaviour.GetDirection();
+        }
     }
 }

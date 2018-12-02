@@ -6,6 +6,7 @@ namespace Assets.Controller
     public class GameCanvasController : MonoBehaviour
     {
         [SerializeField] private GameObject PanelObject;
+        [SerializeField] private GameObject PauseButton;
 
         public void ChangeMode(GameMode.eMode mode)
         {
@@ -13,9 +14,15 @@ namespace Assets.Controller
             {
                 case GameMode.eMode.Pause:
                     PanelObject.SetActive(true);
+                    PauseButton.SetActive(true);
+                    break;
+                case GameMode.eMode.Tutorial:
+                    PanelObject.SetActive(false);
+                    PauseButton.SetActive(false);
                     break;
                 default:
                     PanelObject.SetActive(false);
+                    PauseButton.SetActive(true);
                     break;
             }
         }

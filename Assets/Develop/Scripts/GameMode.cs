@@ -9,6 +9,7 @@ namespace Assets
             None,
             Title,
             Game,
+            Tutorial,
             Pause,
             Clear,
             GameOver,

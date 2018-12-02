@@ -24,7 +24,7 @@ namespace Assets
             dictionary = new Dictionary<GameObject, List<GameMode.eMode>>()
             {
                 { TitleCanvas, new List<GameMode.eMode>(){ GameMode.eMode.Title } },
-                { GameCanvas, new List<GameMode.eMode>(){ GameMode.eMode.Game, GameMode.eMode.Pause } },
+                { GameCanvas, new List<GameMode.eMode>(){ GameMode.eMode.Game, GameMode.eMode.Tutorial, GameMode.eMode.Pause } },
                 { ClearCanvas, new List<GameMode.eMode>(){ GameMode.eMode.Clear } },
                 { GameOverCanvas, new List<GameMode.eMode>(){ GameMode.eMode.GameOver, GameMode.eMode.Credits } },
             };

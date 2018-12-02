@@ -12,7 +12,7 @@ namespace Assets.Controller
         private AudioSource audioSource;
 
         private float jumpTime = 0.0f;
-        private bool isJump = false;
+        private bool isJumping = false;
 
         private float maxY = 0.0f;
 
@@ -32,8 +32,9 @@ namespace Assets.Controller
 
             if (TouchInput.GetState() == TouchInput.State.Began)
             {
-                if (isJump)
+                if (!isJumping)
                 {
+                    isJumping = true;
                     rb.AddForce(Vector2.up * 4, ForceMode2D.Impulse);
                     audioSource.Play();
                 }
@@ -41,14 +42,14 @@ namespace Assets.Controller
             else if (TouchInput.GetState() == TouchInput.State.Moved)
             {
                 jumpTime += Time.deltaTime;
-                if (isJump && jumpTime <= 0.2f)
+                if (isJumping && jumpTime <= 0.2f)
                 {
                     rb.velocity = Vector2.up * 4;
                 }
             }
-            else if (TouchInput.GetState() == TouchInput.State.Ended)
+            else if(TouchInput.GetState() == TouchInput.State.Ended)
             {
-                isJump = false;
+                jumpTime = 0.3f;
             }
 
 
@@ -64,17 +65,11 @@ namespace Assets.Controller
             if (collision.gameObject.tag == TagName.GROUND || collision.gameObject.tag == TagName.BLOCK)
             {
                 jumpTime = 0.0f;
-                isJump = true;
+                isJumping = false;
             }
         }
 
 
-
-        public void SetPosition(Vector3 pos)
-        {
-            transform.position += pos;
-            maxY += pos.y;
-        }
 
         public void Init()
         {
@@ -83,6 +78,17 @@ namespace Assets.Controller
 
             maxY = firstPosition.y;
             ScoreManager.Altitude = 0m;
+        }
+
+        public void SetPosition(Vector3 pos)
+        {
+            transform.position += pos;
+            maxY += pos.y;
+        }
+
+        public bool IsJumping()
+        {
+            return isJumping;
         }
     }
 }

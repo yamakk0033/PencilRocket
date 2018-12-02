@@ -89,5 +89,10 @@ namespace Assets
             this.Apper(firstPosition.y);
             StartCoroutine(Loop());
         }
+
+        public BlockController GetTarget()
+        {
+            return target;
+        }
     }
 }

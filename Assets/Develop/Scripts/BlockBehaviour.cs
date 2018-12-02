@@ -142,5 +142,10 @@ namespace Assets
         {
             updateDictionary[ptn]();
         }
+
+        public eDirection GetDirection()
+        {
+            return direction;
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace Assets
         [Serializable]
         public struct SaveData
         {
-            public long MaxAltitude; // 標高
+            public bool IsTutorial;
         }
 
 
@@ -17,7 +17,15 @@ namespace Assets
 
         public static SaveData Get()
         {
-            return JsonUtility.FromJson<SaveData>(PlayerPrefs.GetString(Key));
+            string value = PlayerPrefs.GetString(Key, "");
+            if(string.IsNullOrWhiteSpace(value))
+            {
+                var sd = new SaveData();
+                sd.IsTutorial = true;
+                return sd;
+            }
+
+            return JsonUtility.FromJson<SaveData>(value);
         }
 
         public static void Set(SaveData inst)

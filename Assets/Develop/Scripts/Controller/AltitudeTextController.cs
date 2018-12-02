@@ -16,12 +16,12 @@ namespace Assets.Controller
 
         private void OnEnable()
         {
-            text.text = (ScoreManager.Altitude * 10.0m).ToString(format);
+            text.text = ScoreManager.ViewAltitude.ToString(format);
         }
 
         private void Update()
         {
-            text.text = (ScoreManager.Altitude * 10.0m).ToString(format);
+            text.text = ScoreManager.ViewAltitude.ToString(format);
         }
     }
 }
