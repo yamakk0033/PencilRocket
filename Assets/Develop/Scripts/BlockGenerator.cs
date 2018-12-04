@@ -18,12 +18,16 @@ namespace Assets
 
         private Queue<BlockController> blockQueue = new Queue<BlockController>();
         private BlockController target;
+        private AudioSource audioSource;
+
         private Vector3 firstPosition;
         private float colliderSizeY;
 
 
         private void Awake()
         {
+            audioSource = GetComponent<AudioSource>();
+
             firstPosition = BlockPrefab.transform.position;
 
             var col = BlockPrefab.GetComponent<BoxCollider2D>();
@@ -47,6 +51,7 @@ namespace Assets
             {
                 if (target.IsNeedleCollision)
                 {
+                    audioSource.Play();
                     yield break;
                 }
                 else if (target.IsBlockCollision)

@@ -14,19 +14,19 @@ namespace Assets
             /// </summary>
             No1 = 0,
             /// <summary>
-            /// 徐々に速度が速くなる
+            /// 出現位置が遠い
             /// </summary>
             No2,
             /// <summary>
-            /// 出現位置に距離がある
+            /// 出現位置が近い
             /// </summary>
             No3,
             /// <summary>
-            /// 出現位置が近い
+            /// 見えたところで一度止まり、再び動き出す。
             /// </summary>
             No4,
             /// <summary>
-            /// 見えたところで一度止まり、再び動き出す。
+            /// 見えたところで一度止まり、再び動き出すが、そのスピードが徐々に速くなる
             /// </summary>
             No5,
         }
@@ -50,15 +50,15 @@ namespace Assets
         public BlockBehaviour()
         {
             initDictionary.Add(ePattern.No1, InitNo1);
-            initDictionary.Add(ePattern.No2, InitNo1);
+            initDictionary.Add(ePattern.No2, InitNo2);
             initDictionary.Add(ePattern.No3, InitNo3);
-            initDictionary.Add(ePattern.No4, InitNo4);
+            initDictionary.Add(ePattern.No4, InitNo1);
             initDictionary.Add(ePattern.No5, InitNo1);
 
             updateDictionary.Add(ePattern.No1, UpdateNo1);
-            updateDictionary.Add(ePattern.No2, UpdateNo2);
+            updateDictionary.Add(ePattern.No2, UpdateNo1);
             updateDictionary.Add(ePattern.No3, UpdateNo1);
-            updateDictionary.Add(ePattern.No4, UpdateNo1);
+            updateDictionary.Add(ePattern.No4, UpdateNo4);
             updateDictionary.Add(ePattern.No5, UpdateNo5);
         }
 
@@ -69,13 +69,13 @@ namespace Assets
             velocity = new Vector2(4.0f, 0.0f);
         }
 
-        private void InitNo3()
+        private void InitNo2()
         {
             tran.position = new Vector3(tran.position.x + Random.Range(1.0f, 3.0f), tran.position.y);
             velocity = new Vector2(4.0f, 0.0f);
         }
 
-        private void InitNo4()
+        private void InitNo3()
         {
             tran.position = new Vector3(tran.position.x - Random.Range(0.5f, 1.5f), tran.position.y);
             velocity = new Vector2(4.0f, 0.0f);
@@ -87,9 +87,21 @@ namespace Assets
             rb.velocity = velocity;
         }
 
-        private void UpdateNo2()
+        private void UpdateNo4()
         {
-            rb.velocity = velocity * 1.0001f;
+            float x = tran.position.x;
+            if (x < 0) x *= -1;
+
+
+            if (x <= 14.0f && stopTime <= 1.0f)
+            {
+                stopTime += Time.fixedDeltaTime;
+                rb.velocity = new Vector2(0.0f, 0.0f);
+            }
+            else
+            {
+                rb.velocity = velocity;
+            }
         }
 
         private void UpdateNo5()
@@ -101,7 +113,14 @@ namespace Assets
             if (x <= 14.0f && stopTime <= 1.0f)
             {
                 stopTime += Time.fixedDeltaTime;
-                rb.velocity = new Vector2(0.0f, 0.0f);
+
+                velocity = new Vector2(0.0f, 0.0f);
+                rb.velocity = velocity;
+            }
+            else if(x <= 14.0f)
+            {
+                var dir = (direction == eDirection.Left) ? Vector2.right : Vector2.left;
+                rb.velocity += dir * (Time.deltaTime * 4);
             }
             else
             {

@@ -80,6 +80,8 @@ namespace Assets
                 {
                     saveData.IsTutorial = false;
                     SaveDataManager.Set(saveData);
+
+                    Time.timeScale = 1.0f;
                     Mode = GameMode.eMode.GameOver;
                     break;
                 }

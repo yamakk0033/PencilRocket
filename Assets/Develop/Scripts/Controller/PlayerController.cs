@@ -12,7 +12,7 @@ namespace Assets.Controller
         private AudioSource audioSource;
 
         private float jumpTime = 0.0f;
-        private bool isJumping = false;
+        private bool isJumping = true;
 
         private float maxY = 0.0f;
 
@@ -77,6 +77,7 @@ namespace Assets.Controller
             transform.rotation = firstRotation;
 
             maxY = firstPosition.y;
+            isJumping = true;
             ScoreManager.Altitude = 0m;
         }
 
