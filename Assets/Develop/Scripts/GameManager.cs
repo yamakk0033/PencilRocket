@@ -5,6 +5,9 @@ using UnityEngine.Advertisements;
 
 namespace Assets
 {
+    /// <summary>
+    /// ゲーム全体を管理
+    /// </summary>
     [DisallowMultipleComponent]
     public class GameManager : MonoBehaviour
     {
@@ -46,6 +49,7 @@ namespace Assets
             Mode = GameMode.eMode.Title;
         }
 
+        // 非アクティブ時にポーズ画面へ遷移
         private void OnApplicationFocus(bool focus)
         {
             if (focus && Mode == GameMode.eMode.Game)
@@ -61,7 +65,6 @@ namespace Assets
             while (true)
             {
                 Tutorial();
-
                 if(Mode == GameMode.eMode.Tutorial)
                 {
                     if (TouchInput.GetState() == TouchInput.State.Began)
@@ -112,6 +115,7 @@ namespace Assets
 
 
 
+        // ボタンクリック処理
         public void OnClickTitleLetter()
         {
             playerController.Init();

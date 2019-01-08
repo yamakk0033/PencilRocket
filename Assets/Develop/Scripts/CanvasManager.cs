@@ -5,12 +5,14 @@ using UnityEngine;
 
 namespace Assets
 {
+    /// <summary>
+    /// ゲームモードごとにCanvasを切り替え
+    /// </summary>
     [DisallowMultipleComponent]
     public class CanvasManager : MonoBehaviour
     {
         [SerializeField] private GameObject TitleCanvas;
         [SerializeField] private GameObject GameCanvas;
-        [SerializeField] private GameObject ClearCanvas;
         [SerializeField] private GameObject GameOverCanvas;
         private GameCanvasController gameCanvasController;
         private GameOverCanvasController gameOverCanvasController;
@@ -25,7 +27,6 @@ namespace Assets
             {
                 { TitleCanvas, new List<GameMode.eMode>(){ GameMode.eMode.Title } },
                 { GameCanvas, new List<GameMode.eMode>(){ GameMode.eMode.Game, GameMode.eMode.Tutorial, GameMode.eMode.Pause } },
-                { ClearCanvas, new List<GameMode.eMode>(){ GameMode.eMode.Clear } },
                 { GameOverCanvas, new List<GameMode.eMode>(){ GameMode.eMode.GameOver, GameMode.eMode.Credits } },
             };
         }

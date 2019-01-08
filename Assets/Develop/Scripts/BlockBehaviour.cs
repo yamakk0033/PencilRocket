@@ -7,6 +7,9 @@ namespace Assets
 {
     public class BlockBehaviour
     {
+        /// <summary>
+        /// 挙動パターン
+        /// </summary>
         public enum ePattern
         {
             /// <summary>
@@ -25,10 +28,6 @@ namespace Assets
             /// 見えたところで一度止まり、再び動き出す。
             /// </summary>
             No4,
-            /// <summary>
-            /// 見えたところで一度止まり、再び動き出すが、そのスピードが徐々に速くなる
-            /// </summary>
-            No5,
         }
 
         public enum eDirection
@@ -53,13 +52,11 @@ namespace Assets
             initDictionary.Add(ePattern.No2, InitNo2);
             initDictionary.Add(ePattern.No3, InitNo3);
             initDictionary.Add(ePattern.No4, InitNo1);
-            initDictionary.Add(ePattern.No5, InitNo1);
 
             updateDictionary.Add(ePattern.No1, UpdateNo1);
             updateDictionary.Add(ePattern.No2, UpdateNo1);
             updateDictionary.Add(ePattern.No3, UpdateNo1);
             updateDictionary.Add(ePattern.No4, UpdateNo4);
-            updateDictionary.Add(ePattern.No5, UpdateNo5);
         }
 
 
@@ -97,30 +94,6 @@ namespace Assets
             {
                 stopTime += Time.fixedDeltaTime;
                 rb.velocity = new Vector2(0.0f, 0.0f);
-            }
-            else
-            {
-                rb.velocity = velocity;
-            }
-        }
-
-        private void UpdateNo5()
-        {
-            float x = tran.position.x;
-            if (x < 0) x *= -1;
-
-
-            if (x <= 14.0f && stopTime <= 1.0f)
-            {
-                stopTime += Time.fixedDeltaTime;
-
-                velocity = new Vector2(0.0f, 0.0f);
-                rb.velocity = velocity;
-            }
-            else if(x <= 14.0f)
-            {
-                var dir = (direction == eDirection.Left) ? Vector2.right : Vector2.left;
-                rb.velocity += dir * (Time.deltaTime * 4);
             }
             else
             {

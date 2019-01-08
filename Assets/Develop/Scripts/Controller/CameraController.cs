@@ -7,20 +7,20 @@ namespace Assets.Controller
     {
         [SerializeField] private GameObject PlayerObject;
         private Transform playerTran;
-        private Vector3 position;
+        private Vector3 pos;
 
         private void Start()
         {
             playerTran = PlayerObject.transform;
-            position = new Vector3(transform.position.x, 0.0f, transform.position.z);
+            pos = new Vector3(transform.position.x, 0.0f, transform.position.z);
         }
 
         private void LateUpdate()
         {
-            position.y = playerTran.position.y;
-            if (position.y < 0.0f) position.y = 0.0f;
+            pos.y = playerTran.position.y;
+            if (pos.y < 0.0f) pos.y = 0.0f;
 
-            transform.position = position;
+            transform.position = pos;
         }
     }
 

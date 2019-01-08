@@ -70,17 +70,13 @@ namespace Assets.Controller
             {
                 pattern = BlockBehaviour.ePattern.No1;
             }
-            else if (ScoreManager.Altitude < 25.0m)
+            else if (ScoreManager.Altitude < 20.0m)
             {
                 pattern = (BlockBehaviour.ePattern)Random.Range(0, (int)BlockBehaviour.ePattern.No3 + 1);
             }
-            else if (ScoreManager.Altitude < 50.0m)
-            {
-                pattern = (BlockBehaviour.ePattern)Random.Range(0, (int)BlockBehaviour.ePattern.No4 + 1);
-            }
             else
             {
-                pattern = (BlockBehaviour.ePattern)Random.Range(0, (int)BlockBehaviour.ePattern.No5 + 1);
+                pattern = (BlockBehaviour.ePattern)Random.Range(0, (int)BlockBehaviour.ePattern.No4 + 1);
             }
 
             transform.position = new Vector3(x, y);

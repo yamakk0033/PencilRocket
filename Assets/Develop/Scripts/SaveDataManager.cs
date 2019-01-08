@@ -8,6 +8,9 @@ namespace Assets
         [Serializable]
         public struct SaveData
         {
+            /// <summary>
+            /// True：チュートリアルを行う
+            /// </summary>
             public bool IsTutorial;
         }
 

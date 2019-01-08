@@ -11,7 +11,7 @@ namespace Assets
         public enum State
         {
             /// <summary>
-            /// タッチなし
+            /// タッチしていない
             /// </summary>
             None,
 
